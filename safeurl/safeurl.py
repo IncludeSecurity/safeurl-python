@@ -160,36 +160,36 @@ class Options(object):
         return self._pin_dns
 
     def enablePinDns(self):
-    	"""
-		Enable pin DNS option
+        """
+        Enable pin DNS option
 
-		:rtype: :class:`Options`
-    	"""
+        :rtype: :class:`Options`
+        """
         self._pin_dns = True
         return self
 
     def disablePinDns(self):
-    	"""
-		Disable pin DNS option
+        """
+        Disable pin DNS option
 
-		:rtype: :class:`Options`
-    	"""
+        :rtype: :class:`Options`
+        """
         self._pin_dns = False
         return self
 
     def isInList(self, lst, type_, value):
-    	"""
-		Checks if a specific value is in a list
+        """
+        Checks if a specific value is in a list
 
-		:param arg1: Options: "whitelist" or "blacklist"
-		:type arg1: string
-		:param arg2: Options: "ip", "port", "domain", or "scheme"
-		:type arg2: string
-		:param arg3: Value to check for
-		:type arg3: string
+        :param arg1: Options: "whitelist" or "blacklist"
+        :type arg1: string
+        :param arg2: Options: "ip", "port", "domain", or "scheme"
+        :type arg2: string
+        :param arg3: Value to check for
+        :type arg3: string
 
-		:rtype: bool
-    	"""
+        :rtype: bool
+        """
         _check_allowed_lists(lst)
         _check_allowed_keys(type_)
 
@@ -211,16 +211,16 @@ class Options(object):
             return value in dst
 
     def getList(self, lst, type_=None):
-    	""""
-		Returns a specific list
+        """"
+        Returns a specific list
 
-		:param arg1: Options: "blacklist" or "whitelist"
-		:type arg1: string
-		:param arg2: Type (Optional) - Options: "ip", "port", "domain", or "scheme"
-		:type arg2: string
+        :param arg1: Options: "blacklist" or "whitelist"
+        :type arg1: string
+        :param arg2: Type (Optional) - Options: "ip", "port", "domain", or "scheme"
+        :type arg2: string
 
-		:rtype: list
-    	"""
+        :rtype: list
+        """
         _check_allowed_lists(lst)
 
         dst = self._lists[lst]
@@ -232,18 +232,18 @@ class Options(object):
         return dst
 
     def setList(self, lst, values, type_=None):
-    	"""
-		Sets a list to be passed in as dictionary
+        """
+        Sets a list to be passed in as dictionary
 
-		:param arg1: Options: "blacklist" or "whitelist"
-		:type arg1: string
-		:param arg2: dictionary to be passed in
-		:type arg2: dict
-		:param arg3: Type (Optional) - Options: "ip", "port", "domain", or "scheme"
-		:type arg3: string
+        :param arg1: Options: "blacklist" or "whitelist"
+        :type arg1: string
+        :param arg2: dictionary to be passed in
+        :type arg2: dict
+        :param arg3: Type (Optional) - Options: "ip", "port", "domain", or "scheme"
+        :type arg3: string
 
-		:rtype: :class:`Options`
-    	"""
+        :rtype: :class:`Options`
+        """
         _check_allowed_lists(lst)
 
         if type_ is not None:
@@ -264,28 +264,28 @@ class Options(object):
         return self
 
     def clearList(self, lst):
-    	"""
-		Clears specified list
+        """
+        Clears specified list
 
-		:param arg1: Options: "blacklist" or "whitelist"
-		:type arg1: string
-    	"""
+        :param arg1: Options: "blacklist" or "whitelist"
+        :type arg1: string
+        """
         _check_allowed_lists(lst)
         self._lists[lst] = {"ip": [], "domain": [], "port": [], "scheme": []}
 
     def addToList(self, lst, type_, values):
-    	"""
-		Add value(s) to a specific list
+        """
+        Add value(s) to a specific list
 
-		:param arg1: Options: "blacklist" or "whitelist"
-		:type arg1: string
-		:param arg2: Options: "ip", "domain", "port", or "scheme"
-		:type arg2: string
-		:param arg3: values to add
-		:type arg3: string/list (string)
+        :param arg1: Options: "blacklist" or "whitelist"
+        :type arg1: string
+        :param arg2: Options: "ip", "domain", "port", or "scheme"
+        :type arg2: string
+        :param arg3: values to add
+        :type arg3: string/list (string)
 
-		:rtype: :class:`Options`
-    	"""
+        :rtype: :class:`Options`
+        """
         _check_allowed_lists(lst)
         _check_allowed_keys(type_)
 
@@ -303,18 +303,18 @@ class Options(object):
         return self
 
     def removeFromList(self, lst, type_, values):
-    	"""
-		Remove value(s) from a specific list
+        """
+        Remove value(s) from a specific list
 
-		:param arg1: Option: "blacklist" or "whitelist"
-		:type arg1: string
-		:param arg2: Options: "ip", "domain", "port", or "scheme"
-		:type arg2: string
-		:param arg3: values to remove
-		:type arg3: string/list(string)
+        :param arg1: Option: "blacklist" or "whitelist"
+        :type arg1: string
+        :param arg2: Options: "ip", "domain", "port", or "scheme"
+        :type arg2: string
+        :param arg3: values to remove
+        :type arg3: string/list(string)
 
-		:rtype: :class:`Options`
-    	"""
+        :rtype: :class:`Options`
+        """
         _check_allowed_lists(lst)
         _check_allowed_keys(type_)
 
@@ -329,21 +329,21 @@ class Options(object):
         return self
 
 class Url(object):
-	"""
-	Class for handling URLs
-	"""
+    """
+    Class for handling URLs
+    """
     @staticmethod
     def validateUrl(url, options):
-    	"""
-    	Validates the whole URL
+        """
+        Validates the whole URL
 
-    	:param arg1: The URL
-    	:type arg1: string
-    	:param arg2: Options object
-    	:type arg2: :class:`Options`
+        :param arg1: The URL
+        :type arg1: string
+        :param arg2: Options object
+        :type arg2: :class:`Options`
 
-    	:rtype: dict
-    	"""
+        :rtype: dict
+        """
         if len(url) == 0:
             raise InvalidURLException("Provided URL 'url' cannot be empty")
 
@@ -385,16 +385,16 @@ class Url(object):
 
     @staticmethod
     def validateScheme(scheme, options):
-    	"""
-		Validates a URL scheme
+        """
+        Validates a URL scheme
 
-		:param arg1: scheme
-		:type arg1: string
-		:param arg2: Options object
-		:type arg2: :class:`Object`
+        :param arg1: scheme
+        :type arg1: string
+        :param arg2: Options object
+        :type arg2: :class:`Object`
 
-		:rtype: string
-    	"""
+        :rtype: string
+        """
         # Whitelist always takes precedence over a blacklist
         if not options.isInList("whitelist", "scheme", scheme):
             raise InvalidSchemeException("Provided scheme 'scheme' doesn't match whitelisted values: %s" % (", ".join(options.getList("whitelist", "scheme"))))
@@ -407,16 +407,16 @@ class Url(object):
 
     @staticmethod
     def validatePort(port, options):
-    	"""
-		Validates a port
+        """
+        Validates a port
 
-		:param arg1: port
-		:type arg1: int
-		:param arg2: Options object
-		:type arg2: :class:`Options`
+        :param arg1: port
+        :type arg1: int
+        :param arg2: Options object
+        :type arg2: :class:`Options`
 
-		:rtype: int
-		"""
+        :rtype: int
+        """
         if not options.isInList("whitelist", "port", port):
             raise InvalidPortException("Provided port 'port' doesn't match whitelisted values: %s" % (", ".join(options.getList("whitelist", "port"))))
 
@@ -428,18 +428,18 @@ class Url(object):
 
     @staticmethod
     def validateHostname(hostname, ips, options):
-    	"""
-		Validates a URL hostname
+        """
+        Validates a URL hostname
 
-		:param arg1: hostname
-		:type arg1: string
-		:param arg2: IP addresses to validate
-		:type arg2: list (string)
-		:param arg3: Options object
-		:type arg3: :class:`Options`
+        :param arg1: hostname
+        :type arg1: string
+        :param arg2: IP addresses to validate
+        :type arg2: list (string)
+        :param arg3: Options object
+        :type arg3: :class:`Options`
 
-		:rtype: string
-    	"""
+        :rtype: string
+        """
         # Check the host against the domain lists
         if not options.isInList("whitelist", "domain", hostname):
             raise InvalidDomainException("Provided hostname 'hostname' doesn't match whitelisted values: %s" % (", ".join(options.getList("whitelist", "domain"))))
@@ -466,14 +466,14 @@ class Url(object):
 
     @staticmethod
     def buildUrl(parts):
-    	"""
-    	Rebuild a URL based on a :func:`_mutable()` object of parts
+        """
+        Rebuild a URL based on a :func:`_mutable()` object of parts
 
-    	:param arg1: object of parts
-    	:type arg1: :func:`_mutable()` object
+        :param arg1: object of parts
+        :type arg1: :func:`_mutable()` object
 
-    	:rtype: string
-    	"""
+        :rtype: string
+        """
         url = []
 
         if len(parts.scheme) != 0:
@@ -516,14 +516,14 @@ class Url(object):
 
     @staticmethod
     def resolveHostname(hostname):
-    	"""
-		Resolve a hostname to its IP(s)
+        """
+        Resolve a hostname to its IP(s)
 
-		:param arg1: hostname
-		:type arg1: string
+        :param arg1: hostname
+        :type arg1: string
 
-		:rtype: list (string)
-    	"""
+        :rtype: list (string)
+        """
         try:
             ips = gethostbyname_ex(hostname)
             return ips[2]
@@ -532,22 +532,22 @@ class Url(object):
 
     @staticmethod
     def cidrMatch(ip, cidr):
-    	"""
-		Checks a passed in IP against a CIDR
+        """
+        Checks a passed in IP against a CIDR
 
-		:param arg1: IP address
-		:type arg1: string
-		:param arg2: CIDR
-		:type arg2: string
+        :param arg1: IP address
+        :type arg1: string
+        :param arg2: CIDR
+        :type arg2: string
 
-		:rtype: bool
-    	"""
+        :rtype: bool
+        """
         return netaddr.IPAddress(ip) in netaddr.IPNetwork(cidr)
 
 class SafeURL(object):
-	"""
-	Core interface of module
-	"""
+    """
+    Core interface of module
+    """
     def __init__(self, handle=None, options=None):
         self.setCurlHandle(handle)
 
@@ -563,22 +563,22 @@ class SafeURL(object):
         self._handle.setopt(pycurl.IPRESOLVE, pycurl.IPRESOLVE_V4)
 
     def getCurlHandle(self):
-    	"""
-		Returns cURL Handle
+        """
+        Returns cURL Handle
 
-		:rtype: :class:`SafeURL`
-    	"""
+        :rtype: :class:`SafeURL`
+        """
         return self._handle
 
     def setCurlHandle(self, handle):
-    	"""
-		Sets cURL handle
+        """
+        Sets cURL handle
 
-		:param arg1: handle
-		:type arg1: (Optional) :class:`pycurl.Curl` object
+        :param arg1: handle
+        :type arg1: (Optional) :class:`pycurl.Curl` object
 
-		:rtype: :class:`pycurl.Curl` object
-    	"""
+        :rtype: :class:`pycurl.Curl` object
+        """
         if handle is None:
             handle = pycurl.Curl()
 
@@ -589,33 +589,33 @@ class SafeURL(object):
         self._handle = handle
 
     def getOptions(self):
-    	"""
-		Gets Options
+        """
+        Gets Options
 
-		:rtype: :class:`Options`
-    	"""
+        :rtype: :class:`Options`
+        """
         return self._options
 
     def setOptions(self, options):
-    	"""
-		Sets options
+        """
+        Sets options
 
-		:param arg1: Options object
-		:type: :class:`Options` object
+        :param arg1: Options object
+        :type: :class:`Options` object
 
-		:rtype: :class:`Options` object
-    	"""
+        :rtype: :class:`Options` object
+        """
         self._options = options
 
     def execute(self, url):
-    	"""
-		Executes a cURL request, whilst checking that the URL abides by our whitelists/blacklists
+        """
+        Executes a cURL request, whilst checking that the URL abides by our whitelists/blacklists
 
-		:param arg1: URL
-		:type arg1: string
-		
-		:rtype: string
-    	"""
+        :param arg1: URL
+        :type arg1: string
+
+        :rtype: string
+        """
         # Backup the existing URL
         originalUrl = url
 
