@@ -15,6 +15,7 @@ from socket import gethostbyname_ex
 import re
 import netaddr
 import pycurl
+import socket
 import StringIO
 
 # Python 2.7/3 urlparse
@@ -27,6 +28,7 @@ except:
     from urllib.parse import urlparse
     from urllib.parse import quote
 
+class ObsoletePyCurlException(Exception): pass
 class InvalidOptionException(Exception): pass
 class InvalidURLException(Exception): pass
 class InvalidDomainException(Exception): pass
@@ -165,6 +167,7 @@ class Options(object):
 
         :rtype: :class:`Options`
         """
+        # This is now effectively a no-op, DNS pinning has been removed.
         self._pin_dns = True
         return self
 
@@ -426,8 +429,8 @@ class Url(object):
         # Existing value is fine
         return port
 
-    @staticmethod
-    def validateHostname(hostname, ips, options):
+    @classmethod
+    def validateHostname(cls, hostname, ips, options):
         """
         Validates a URL hostname
 
@@ -447,6 +450,12 @@ class Url(object):
         if options.isInList("blacklist", "domain", hostname):
             raise InvalidDomainException("Provided hostname 'hostname' matches a blacklisted value")
 
+        cls.validateIPAddresses(ips, options)
+
+        return hostname
+
+    @staticmethod
+    def validateIPAddresses(ips, options):
         whitelistedIps = options.getList("whitelist", "ip")
 
         if len(whitelistedIps) != 0:
@@ -461,8 +470,7 @@ class Url(object):
             has_match = any(Url.cidrMatch(ip, blip) for ip in ips for blip in blacklistedIps)
             if has_match:
                 raise InvalidIPException("Provided hostname 'hostname' resolves to '%s', which matches a blacklisted value: %s" % (", ".join(ips), blacklistedIps))
-
-        return hostname
+        return ips
 
     @staticmethod
     def buildUrl(parts):
@@ -562,6 +570,25 @@ class SafeURL(object):
         # Force IPv4, since this class isn't yet compatible with IPv6
         self._handle.setopt(pycurl.IPRESOLVE, pycurl.IPRESOLVE_V4)
 
+    def _openSocketCallback(self, *args):
+        # Depending on the PyCurl version there may be several different calling conventions
+        # for this callback:
+        # [family, socktype, protocol]
+        # [family, socktype, protocol, addr]
+        # [purpose, [family, socktype, protocol, addr]]
+        # We can only support the last two, PyCurl before 7.19.3 doesn't include the addr.
+        if len(args) == 3:
+            raise ObsoletePyCurlException("System PyCurl has obsolete OPENSOCKETFUNCTION")
+        elif len(args) == 2:
+            _, address = args
+        else:
+            address = args
+        family, socktype, protocol, addr = address
+
+        Url.validateIPAddresses((addr[0],), self._options)
+
+        return socket.socket(family, socktype, protocol)
+
     def getCurlHandle(self):
         """
         Returns cURL Handle
@@ -616,11 +643,9 @@ class SafeURL(object):
 
         :rtype: string
         """
-        # Backup the existing URL
-        originalUrl = url
-
         # Execute, catch redirects and validate the URL
         redirected = False
+        response = None
         redirectCount = 0
         redirectLimit = self._options.getFollowLocationLimit()
         followLocation = self._options.getFollowLocation()
@@ -628,26 +653,16 @@ class SafeURL(object):
         while True:
             # Validate the URL
             url = Url.validateUrl(url, self._options)
-
             # Are there credentials, but we don"t want to send them?
             if not self._options.getSendCredentials() and \
                 (url["parts"].username is not None or url["parts"].password is not None):
                 raise InvalidURLException("Credentials passed in but 'sendCredentials' is set to false")
 
-            if self._options.getPinDns():
-                # Send a Host header
-                self._handle.setopt(pycurl.HTTPHEADER, ["Host: %s" % url["parts"].hostname])
-                # The "fake" URL
-                self._handle.setopt(pycurl.URL, url["cleanUrl"])
-
-                # We also have to disable SSL cert verification, which is not great
-                # Might be possible to manually check the certificate ourselves?
-                self._handle.setopt(pycurl.SSL_VERIFYPEER, False)
-            else:
-                self._handle.setopt(pycurl.URL, url["cleanUrl"])
+            self._handle.setopt(pycurl.URL, url["cleanUrl"])
 
             # Execute the cURL request
             response = StringIO.StringIO()
+            self._handle.setopt(pycurl.OPENSOCKETFUNCTION, self._openSocketCallback)
             self._handle.setopt(pycurl.WRITEFUNCTION, response.write)
             self._handle.perform()
 
