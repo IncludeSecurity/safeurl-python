@@ -39,3 +39,16 @@ try:
     res = sc.execute("http://fin1te.net")
 except:
     print "Unexpected error:", sys.exc_info()
+
+
+# forbidden host
+try:
+    sc = safeurl.SafeURL()
+
+    opt = safeurl.Options()
+    opt.enableFollowLocation().setFollowLocationLimit(10)
+    sc.setOptions(opt)
+
+    res = sc.execute("http://localhost")
+except:
+    print "Error:", sys.exc_info()
