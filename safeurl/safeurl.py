@@ -12,21 +12,12 @@ from __future__ import print_function
 from numbers import Number
 from socket import gethostbyname_ex
 
-import re
 import netaddr
 import pycurl
 import socket
-import StringIO
-
-# Python 2.7/3 urlparse
-try:
-    # Python 2.7
-    from urlparse import urlparse
-    from urllib import quote
-except:
-    # Python 3
-    from urllib.parse import urlparse
-    from urllib.parse import quote
+import io
+from urllib.parse import urlparse
+from urllib.parse import quote
 
 class ObsoletePyCurlException(Exception): pass
 class InvalidOptionException(Exception): pass
@@ -204,10 +195,9 @@ class Options(object):
             else:
                 return False
 
-        # For domains, a regex match is needed
         if type_ == "domain":
             for domain in dst:
-                if re.match("(?i)^%s" % domain, value) is not None:
+                if domain.lower() == value.lower():
                     return True
             return False
         else:
@@ -661,7 +651,7 @@ class SafeURL(object):
             self._handle.setopt(pycurl.URL, url["cleanUrl"])
 
             # Execute the cURL request
-            response = StringIO.StringIO()
+            response = io.BytesIO()
             self._handle.setopt(pycurl.OPENSOCKETFUNCTION, self._openSocketCallback)
             self._handle.setopt(pycurl.WRITEFUNCTION, response.write)
             self._handle.perform()
