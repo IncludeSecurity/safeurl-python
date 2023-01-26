@@ -1,5 +1,5 @@
 [project]
-name = "SafeURL"
+name = "SafeURL-Python"
 version="1.2"
 description="SafeURL is a library that aids developers in protecting against a class of vulnerabilities known as Server Side Request Forgery."
 readme="README.md"
