@@ -197,7 +197,7 @@ class Options(object):
 
         if type_ == "domain":
             for domain in dst:
-                if domain.lower() == value.lower():
+                if domain.lower().strip(".") == value.lower().strip("."):
                     return True
             return False
         else:

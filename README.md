@@ -2,7 +2,9 @@
 ### Ported by [@nicolasrod](https://github.com/nicolasrod) and docs by [@momopranto](https://github.com/momopranto)
 
 ## Overview
-SafeURL is a library that aids developers in protecting against a class of vulnerabilities known as [Server Side Request Forgery](http://www.acunetix.com/blog/articles/server-side-request-forgery-vulnerability/). It does this by validating each part of the URL against a configurable white or black list before making an HTTP request. SafeURL is open-source and licensed under MIT.
+SafeURL is a library that aids developers in protecting against a class of vulnerabilities known as [Server Side Request Forgery (SSRF)](http://www.acunetix.com/blog/articles/server-side-request-forgery-vulnerability/). It does this by validating each part of the URL against a configurable white or black list before making an HTTP request. SafeURL is open-source and licensed under MIT.
+
+Note that for mitigating SSRF vulnerabilities, we first recommend routing outbound requests from your infrastructure through a proxy such as [Smokescreen](https://github.com/stripe/smokescreen). Alternately, ensure that all services which can make outbound requests to potentially user-controlled URLs are firewalled from talking to other internal hosts. Application-layer defences such as this library should only be used if those options are not practical. Please see [our blog post](https://blog.includesecurity.com/2023/03/mitigating-ssrf-in-2023/) for further information.
 
 ## Installation
 Clone this repository and import it into your project.
