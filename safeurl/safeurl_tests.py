@@ -68,3 +68,17 @@ except:
     print("Error:", sys.exc_info())
 
 
+# fqdn
+try:
+    sc = safeurl.SafeURL()
+
+    opt = safeurl.Options()
+    opt.setList("blacklist", ["example.com"], "domain")
+    sc.setOptions(opt)
+
+    res = sc.execute("https://example.com.")
+
+except:
+    print("Error:", sys.exc_info())
+
+
