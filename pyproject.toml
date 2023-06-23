@@ -1,12 +1,12 @@
 [project]
 name = "SafeURL-Python"
-version="1.2"
+version="1.3"
 description="SafeURL is a library that aids developers in protecting against a class of vulnerabilities known as Server Side Request Forgery."
 readme="README.md"
-dependencies = [
-    "pycurl",
-    "netaddr"
-]
+dynamic = ["dependencies"]
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
 
 [project.urls]
 "Homepage" = "https://github.com/IncludeSecurity/safeurl-python"
